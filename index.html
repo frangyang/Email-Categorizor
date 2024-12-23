@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Email Categorizer</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+    <script src="categorizer.js"></script>
+    <style>
+        .container { 
+            padding: 15px; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .section { 
+            margin-bottom: 20px; 
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .category-form {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .category-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .category-item {
+            border: 1px solid #eee;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 4px;
+        }
+        .keyword-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .keyword-tag {
+            background: #e1e1e1;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.9em;
+        }
+        .debug-panel {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 4px;
+        }
+        .error { color: #dc3545; }
+        .success { color: #28a745; }
+        .info { color: #17a2b8; }
+        .settings-section {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 5px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 5px 10px;
+            background: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #106ebe;
+        }
+        h3, h4 { 
+            margin-top: 0;
+            color: #333;
+        }
+        .weight-input {
+            width: 60px;
+            margin-left: 5px;
+        }
+        #status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Category Management Section -->
+        <div class="section">
+            <h3>Category Management</h3>
+            <div class="category-form">
+                <input type="text" id="categoryName" placeholder="Category Name" />
+                <input type="text" id="keywordInput" placeholder="Keywords (comma-separated)" />
+                <button onclick="addCategory()">Add Category</button>
+            </div>
+            <div id="categoryList" class="category-list"></div>
+        </div>
+
+        <!-- Email Processing Section -->
+        <div class="section">
+            <h3>Process Emails</h3>
+            <select id="folderSelect" style="margin-right: 10px;"></select>
+            <button id="runButton" onclick="processFolder()">Process Selected Folder</button>
+            
+            <div class="settings-section">
+                <h4>Scoring Weights</h4>
+                <div>
+                    <label>Subject Line Weight:
+                        <input type="number" id="subjectWeight" value="10" min="1" class="weight-input" />
+                    </label>
+                </div>
+                <div>
+                    <label>Body Weight:
+                        <input type="number" id="bodyWeight" value="1" min="1" class="weight-input" />
+                    </label>
+                </div>
+                <div>
+                    <label>Minimum Score Threshold:
+                        <input type="number" id="scoreThreshold" value="10" min="0" class="weight-input" />
+                    </label>
+                </div>
+            </div>
+            <div id="status"></div>
+        </div>
+
+        <!-- Debug Section -->
+        <div class="section">
+            <button id="debugToggle" onclick="toggleDebug()">Show Debug Panel</button>
+            <button id="clearLogs" onclick="clearDebugLogs()">Clear Logs</button>
+            <label>
+                <input type="checkbox" id="verboseLogging" />
+                Verbose Logging
+            </label>
+            <div id="debugPanel" class="debug-panel" style="display: none;">
+                <div id="debugLogs"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
